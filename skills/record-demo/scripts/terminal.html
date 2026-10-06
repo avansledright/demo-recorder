@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  :root { --fs: 19px; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { display: flex; align-items: center; justify-content: center; overflow: hidden;
+         background: radial-gradient(130% 130% at 20% 0%, #312e81 0%, #111827 55%, #030712 100%); }
+  .window { width: 92%; height: 88%; display: flex; flex-direction: column; border-radius: 14px;
+            overflow: hidden; background: #0d1117; border: 1px solid rgba(255,255,255,.12);
+            box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+  .bar { flex: none; height: 42px; display: flex; align-items: center; gap: 8px; padding: 0 16px;
+         background: #161b22; border-bottom: 1px solid rgba(255,255,255,.07); }
+  .dot { width: 13px; height: 13px; border-radius: 50%; }
+  .title { flex: 1; margin-right: 55px; text-align: center; color: #8b949e;
+           font: 500 14px Inter, -apple-system, "Segoe UI", system-ui, sans-serif; }
+  #screen { flex: 1; margin: 0; padding: 18px 22px; overflow: hidden; color: #e6edf3;
+            font: var(--fs)/1.5 "JetBrains Mono", "Fira Code", "DejaVu Sans Mono", "Noto Sans Mono", monospace;
+            white-space: pre-wrap; overflow-wrap: anywhere; }
+  .prompt { color: #7ee787; font-weight: 700; }
+  .caret { display: inline-block; width: .6em; height: 1.15em; margin-bottom: -.2em; background: #e6edf3;
+           animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .b { font-weight: 700; } .d { opacity: .6; } .i { font-style: italic; } .u { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="bar">
+    <span class="dot" style="background:#ff5f57"></span>
+    <span class="dot" style="background:#febc2e"></span>
+    <span class="dot" style="background:#28c840"></span>
+    <span class="title" id="title"></span>
+  </div>
+  <pre id="screen"></pre>
+</div>
+<script>
+  const screen = document.getElementById('screen');
+  const caret = document.createElement('span');
+  caret.className = 'caret';
+  let line = null;
+
+  const bottom = () => { screen.scrollTop = screen.scrollHeight; };
+  window.term = {
+    setup(o) {
+      document.getElementById('title').textContent = o.title || '';
+      if (o.font_size) document.documentElement.style.setProperty('--fs', o.font_size + 'px');
+    },
+    prompt(text) {
+      line = document.createElement('span');
+      const p = document.createElement('span');
+      p.className = 'prompt';
+      p.textContent = text;
+      const typed = document.createElement('span');
+      line.append(p, typed, caret);
+      line.typed = typed;
+      screen.appendChild(line);
+      bottom();
+    },
+    key(ch) { line.typed.textContent += ch; bottom(); },
+    enter() { caret.remove(); screen.append('\n'); bottom(); },
+    // html is produced by the recorder's ANSI converter, which escapes all text.
+    out(html) { screen.insertAdjacentHTML('beforeend', html + '\n'); bottom(); },
+    clear() { screen.textContent = ''; },
+  };
+</script>
+</body>
+</html>

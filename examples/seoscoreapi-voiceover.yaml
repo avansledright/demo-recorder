@@ -1,0 +1,56 @@
+# Narrated web demo: the seoscoreapi.com homepage audit with an Amazon Polly voiceover.
+# Each `say` starts a line and the steps after it play underneath; the next `say` waits its turn.
+type: web
+output: ../out/seoscoreapi-voiceover.mp4
+viewport: { width: 1024, height: 576 }
+scale: 1.875
+voiceover:
+  voice: Matthew
+  engine: generative
+  # Polly reads unfamiliar names as words; spell them the way they should be said.
+  pronounce:
+    GPTBot: "G P T bot"
+    ClaudeBot: "Claude bot"
+
+steps:
+  - say: "How good is your site's SEO? With SEO Score API, you can find out in seconds."
+  - card:
+      title: "How good is your site's SEO?"
+      subtitle: "Find out in seconds with SEO Score API"
+      hold: 3.5
+      while:
+        - goto: https://seoscoreapi.com
+
+  # 1. Live audit
+  - say: "You can try it right on the homepage. No signup needed. Just enter a URL and run the audit."
+  - click: 'a[href="#demo"]'
+  - scroll_to: { selector: "#demo", offset: 40 }
+  - type:
+      selector: "#url-input"
+      text: seoscoreapi.com
+  - click: "#audit-btn"
+  - wait_for: { selector: "#demo-result .score-circle", timeout: 60 }
+  - scroll_to: { selector: "#demo-result", offset: 58 }
+
+  # 2. Results
+  - say: "A moment later you have an overall score and a letter grade."
+  - highlight:
+      selector: "#demo-result .score-display"
+      caption: "An overall score and letter grade, back in seconds"
+      hold: 3.5
+  - say: "The AI readability score tells you whether crawlers like GPTBot and ClaudeBot can actually read your page."
+  - highlight:
+      selector: "#demo-result .score-display + div"
+      caption: "AI Readability: can GPTBot and ClaudeBot actually read your page?"
+      hold: 5.5
+  - say: "And a prioritized list of fixes shows exactly what to work on next."
+  - highlight:
+      selector: "#demo-result .priorities"
+      caption: "Prioritized fixes tell you exactly what to work on next"
+      hold: 4
+
+  # 3. Call to action
+  - say: { text: "It's free to start. Get your API key at seoscoreapi.com.", gap: 0.6 }
+  - scroll_to: { selector: "#signup", offset: 150, duration: 2.4 }
+  - hover: { selector: "#signup-btn", hold: 0.5 }
+  - caption: "Get your free API key at seoscoreapi.com"

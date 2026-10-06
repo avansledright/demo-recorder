@@ -1,0 +1,16 @@
+{
+  "name": "45sq-demo-recorder",
+  "owner": {
+    "name": "45Squared"
+  },
+  "plugins": [
+    {
+      "name": "demo-recorder",
+      "source": "./",
+      "description": "Record polished product demo videos of web apps and terminal sessions from a short YAML storyboard, with optional Amazon Polly voiceover."
+    }
+  ],
+  "metadata": {
+    "description": "45Squared tools for producing product demo videos."
+  }
+}

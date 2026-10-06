@@ -1,0 +1,10 @@
+{
+  "name": "demo-recorder",
+  "description": "Record polished product demo videos of web apps and terminal sessions from a short YAML storyboard, with optional Amazon Polly voiceover.",
+  "version": "0.2.0",
+  "author": { "name": "45Squared" },
+  "homepage": "https://github.com/avansledright/demo-recorder",
+  "repository": "https://github.com/avansledright/demo-recorder",
+  "license": "MIT",
+  "keywords": ["demo", "video", "screen-recording", "playwright", "voiceover", "amazon-polly"]
+}

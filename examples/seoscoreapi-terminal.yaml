@@ -1,0 +1,48 @@
+# Terminal demo: one curl call to SEO Score API, then the actionable fixes.
+# The key is read from the env file and only ever appears on screen as $SEOSCORE_API_KEY.
+type: terminal
+output: ../out/seoscoreapi-terminal.mp4
+# Create examples/.env with one line: SEOSCORE_API_KEY=your-key (free at seoscoreapi.com).
+env_file: .env
+cwd: tmp
+terminal:
+  title: "seoscoreapi.com — audit any URL with one API call"
+  font_size: 22
+
+steps:
+  - card:
+      title: "SEO Score API"
+      subtitle: "One curl call. A score, a grade, and a list of what to fix."
+      hold: 2.5
+
+  - comment: "Audit a page with a single request"
+  - run:
+      cmd: |
+        curl -s "https://seoscoreapi.com/audit?url=https://seoscoreapi.com" \
+          -H "X-API-Key: $SEOSCORE_API_KEY" > audit.json
+      hold: 0.8
+  - run:
+      cmd: jq -C '{url, score, grade, response_time}' audit.json
+      show: jq '{url, score, grade, response_time}' audit.json
+      hold: 3
+
+  - comment: "Scores for every category"
+  - run:
+      cmd: jq -C '.audit | map_values(.score | round)' audit.json
+      show: jq '.audit | map_values(.score | round)' audit.json
+      hold: 3
+
+  - clear
+  - comment: "The actionable part: prioritized fixes, and who should make them"
+  - run:
+      cmd: |
+        jq -r '.priorities[] | "\u001b[1;33m[\(.severity)]\u001b[0m \u001b[1m\(.issue)\u001b[0m\n  fix: \(.fix)\n  \u001b[2mowner: \(.who_fixes_it)\u001b[0m\n"' audit.json
+      show: |
+        jq -r '.priorities[] | "[\(.severity)] \(.issue)\n  fix: \(.fix)\n  owner: \(.who_fixes_it)\n"' audit.json
+      hold: 6
+
+  - card:
+      title: "Get a free API key"
+      subtitle: "seoscoreapi.com"
+      hold: 3
+      keep: true

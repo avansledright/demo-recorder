@@ -1,0 +1,60 @@
+# Web demo: audit a site from the seoscoreapi.com homepage and read the results.
+type: web
+output: ../out/seoscoreapi-web.mp4
+# A small viewport scaled up to 1920x1080 keeps the site's text readable on video.
+viewport: { width: 1024, height: 576 }
+scale: 1.875
+
+steps:
+  - card:
+      title: "How good is your site's SEO?"
+      subtitle: "Find out in seconds with SEO Score API"
+      hold: 2.2
+      while:
+        - goto: https://seoscoreapi.com
+
+  # 1. Hero and value proposition
+  - highlight:
+      selector: header.hero h1
+      hold: 3
+  - caption: "Try it right on the homepage — no signup needed"
+  - click: 'a[href="#demo"]'
+  - scroll_to: { selector: "#demo", offset: 40 }
+  - wait: 0.6
+
+  # 2. Live audit
+  - type:
+      selector: "#url-input"
+      text: seoscoreapi.com
+  - caption: ""
+  - click: "#audit-btn"
+  - wait_for: { selector: "#demo-result .score-circle", timeout: 60 }
+  - scroll_to: { selector: "#demo-result", offset: 58 }
+  - highlight:
+      selector: "#demo-result .score-display"
+      caption: "An overall score and letter grade, back in seconds"
+      hold: 3.5
+  - highlight:
+      selector: "#demo-result .score-display + div"
+      caption: "AI Readability: can GPTBot and ClaudeBot actually read your page?"
+      hold: 3.5
+  - highlight:
+      selector: "#demo-result .priorities"
+      caption: "Prioritized fixes tell you exactly what to work on next"
+      hold: 4
+  - hover: { selector: "#demo-result .priorities li", hold: 1.2 }
+
+  # 3. What is checked, and pricing
+  - caption: "Technical SEO, performance, accessibility and AI readability"
+  - scroll_to: { selector: "#all-checks", offset: 30, duration: 2.2 }
+  - wait: 3
+  - caption: "Free to start. Simple pricing when you need more."
+  - scroll_to: { selector: "#pricing", offset: 30, duration: 2.4 }
+  - wait: 3.5
+
+  # 4. Call to action
+  - caption: ""
+  - scroll_to: { selector: "#signup", offset: 150, duration: 2.4 }
+  - hover: { selector: "#signup-btn", hold: 0.5 }
+  - caption: "Get your free API key at seoscoreapi.com"
+  - wait: 3

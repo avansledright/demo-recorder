@@ -1,0 +1,9 @@
+# Recorded videos, contact sheets and voice samples
+out/
+# Private working files: briefs and storyboards for specific clients
+demo.txt
+demos/
+# Secrets and editor leftovers
+.env
+*.swp
+__pycache__/

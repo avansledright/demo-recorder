@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Entry point: bootstraps a private virtualenv on first use, then runs the recorder.
+set -euo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VENV="${DEMO_RECORDER_HOME:-$HOME/.cache/demo-recorder}/venv"
+
+command -v ffmpeg >/dev/null || { echo "demo-record: ffmpeg is required (apt install ffmpeg)" >&2; exit 1; }
+
+if [ ! -x "$VENV/bin/python" ] || ! "$VENV/bin/python" -c "import playwright, yaml, boto3" 2>/dev/null; then
+  echo "demo-record: installing Playwright and boto3 into $VENV ..." >&2
+  python3 -m venv "$VENV"
+  "$VENV/bin/pip" install -q playwright pyyaml boto3
+fi
+# No-op when the matching Chromium build is already cached.
+"$VENV/bin/playwright" install chromium >&2
+
+exec "$VENV/bin/python" "$HERE/record.py" "$@"
